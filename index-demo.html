@@ -806,27 +806,37 @@ a better future</h2>
 <script type="text/javascript" src="js/webpack.runtime.min89ce.js" ></script>
 <script>
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".elementor-counter-number").forEach(counter => {
-    const duration = parseInt(counter.dataset.duration) || 2000;
-    const from = parseInt(counter.dataset.fromValue) || 0;
-    const to = parseInt(counter.dataset.toValue) || 0;
-    const suffix = counter.nextElementSibling?.textContent.trim() || "";
-    const startTime = performance.now();
+jQuery(document).ready(function($) {
+  if ($('.elementor-counter-number-wrapper').length) {
+    $('.elementor-counter-number').each(function () {
+      const $el = $(this);
+      const $wrapper = $el.closest('.elementor-counter-number-wrapper');
+      const toVal = parseInt($el.attr('data-to-value'), 10);
+      const duration = parseInt($el.attr('data-duration'), 10) || 2000;
+      const fromVal = parseInt($el.attr('data-from-value'), 10) || 0;
 
-    function updateCounter(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const current = Math.floor(from + (to - from) * progress);
-      counter.textContent = current ;
-      if (progress < 1) {
-        requestAnimationFrame(updateCounter);
-      }
-    }
-
-    requestAnimationFrame(updateCounter);
-  });
+      $wrapper.appear(function () {
+        if (!$el.hasClass('counted')) {
+          $el.addClass('counted');
+          $({ countNum: fromVal }).animate(
+            { countNum: toVal },
+            {
+              duration: duration,
+              easing: 'linear',
+              step: function () {
+                $el.text(Math.floor(this.countNum));
+              },
+              complete: function () {
+                $el.text(this.countNum);
+              }
+            }
+          );
+        }
+      }, { accY: 0 });
+    });
+  }
 });
+
 
 
 
