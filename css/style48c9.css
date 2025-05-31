@@ -14,11 +14,11 @@ body {
 }
 .whatsappfooter {
     position: fixed;
-    bottom: 130px;
+    bottom: 80px;
     height: 50px;
     z-index: 99;
     width: 40px;
-    right: 31px;
+    right: 53px;
 }
 
 body {
